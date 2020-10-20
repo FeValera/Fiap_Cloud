@@ -4,8 +4,8 @@ from flask import Flask, render_template, request, url_for, redirect
 
 from flask_sqlalchemy import SQLAlchemy
 
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
+application = Flask(__name__)
+application.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
 
 db = SQLAlchemy(application)
 
@@ -30,15 +30,15 @@ class Pessoa(db.Model):
 db.create_all()
 
 
-@app.route("/index")
+@application.route("/index")
 def index():
     return render_template("index.html")
 
-@app.route("/cadastrar")
+@application.route("/cadastrar")
 def cadastrar():
     return render_template("cadastro.html")
 
-@app.route("/cadastro", methods=['GET','POST'])
+@application.route("/cadastro", methods=['GET','POST'])
 def cadastro():
     if request.method == "POST":
         nome = request.form.get("nome")
@@ -53,12 +53,12 @@ def cadastro():
 
     return redirect(url_for("index"))
 
-@app.route("/lista")
+@application.route("/lista")
 def lista():
     pessoas = Pessoa.query.all()
     return  render_template("lista.html", pessoas=pessoas)
 
-@app.route("/excluir/<int:id>")
+@application.route("/excluir/<int:id>")
 def excluir(id):
         pessoas = Pessoa.query.filter_by(id=id).first()
 
@@ -69,7 +69,7 @@ def excluir(id):
         pessoas = Pessoa.query.all()
         return render_template("lista.html", pessoas = pessoas)
 
-@app.route("/atualizar/<int:id>", methods=['GET', 'POST'])
+@application.route("/atualizar/<int:id>", methods=['GET', 'POST'])
 def atualizar(id):
     pessoa = Pessoa.query.filter_by(id=id).first()
 
